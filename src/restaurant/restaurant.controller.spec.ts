@@ -49,9 +49,11 @@ describe('RestaurantController', () => {
     });
 
     it('식당 생성 API Test', async () => {
+      const restaurantType = await restaurantTypeController.findAllRestaurant();
+
       const restaurant = await restaurantController.createRestaurant({
         title: '취향',
-        restaurantTypeId: 1,
+        restaurantTypeId: restaurantType[0].id,
       });
 
       expect(restaurant.title).toEqual('취향');
@@ -83,9 +85,12 @@ describe('RestaurantController', () => {
 
     it('식당 API 중복생성 방지 Test', async () => {
       try {
+        const restaurantType =
+          await restaurantTypeController.findAllRestaurant();
+
         await restaurantController.createRestaurant({
           title: '취향',
-          restaurantTypeId: 1,
+          restaurantTypeId: restaurantType[0].id,
         });
       } catch (e) {
         expect(e).toBeInstanceOf(ConflictException);

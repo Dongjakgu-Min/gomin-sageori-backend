@@ -2,12 +2,14 @@ import { ConflictException } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
 import { Restaurant } from './entity/restaurant.entity';
 import { RestaurantType } from './entity/restaurant.type.entity';
 import { RestaurantService } from './restaurant.service';
 
 describe('RestaurantService', () => {
   let service: RestaurantService;
+  let datasource: DataSource;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -29,6 +31,17 @@ describe('RestaurantService', () => {
     }).compile();
 
     service = module.get<RestaurantService>(RestaurantService);
+    datasource = module.get<DataSource>(DataSource);
+  });
+
+  afterAll(async () => {
+    const restaurantRepository = await datasource.getRepository(Restaurant);
+    const restaurantTypeRepository = await datasource.getRepository(
+      RestaurantType,
+    );
+
+    restaurantRepository.delete({});
+    restaurantTypeRepository.delete({});
   });
 
   it('should be defined', () => {

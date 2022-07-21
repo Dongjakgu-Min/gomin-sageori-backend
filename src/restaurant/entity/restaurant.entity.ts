@@ -10,6 +10,7 @@ export class Restaurant {
   @ManyToOne(
     () => RestaurantType,
     (restaurantType) => restaurantType.restaurants,
+    { onDelete: 'CASCADE' },
   )
   restaurantType: RestaurantType;
   @Column({ nullable: true })

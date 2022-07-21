@@ -7,6 +7,8 @@ export class RestaurantType {
   id: number;
   @Column()
   type: string;
-  @OneToMany(() => Restaurant, (restaurant) => restaurant.restaurantType)
+  @OneToMany(() => Restaurant, (restaurant) => restaurant.restaurantType, {
+    cascade: true,
+  })
   restaurants: Restaurant[];
 }
