@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 import { RestaurantDto } from '../dto/restaurant.dto';
 import { RestaurantService } from '../restaurant.service';
@@ -15,8 +15,10 @@ export class RestaurantController {
 
   @ApiOperation({ summary: '무작위의 식당을 선택합니다.' })
   @Get()
-  findRandomRestaurant() {
-    return this.restaurantService.findRandomRestaurant();
+  findRandomRestaurant(@Param('typeId') typeId: number) {
+    return typeId !== undefined
+      ? this.restaurantService.findRandomRestaurantByType(typeId)
+      : this.restaurantService.findRandomRestaurant();
   }
 
   @ApiOperation({ summary: '새로운 식당을 생성합니다.' })
